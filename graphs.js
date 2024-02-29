@@ -1,8 +1,9 @@
 class Nodo {
-    constructor(x, y, mark=false){
+    constructor(x, y, mark=false, charge){
         this.x = x,
         this.y = y,
         this.mark = mark
+        this.charge = charge
     }
 }
 
@@ -49,31 +50,33 @@ function find(cordX , coordY){
     }
 }
 
-function search(origin, meta) {
+function knightMoves(origin, meta) {
     const [a, b] = origin;
     const start = find(a,b);
     const [x, y] = meta;
 
+    start.charge = `${start.x},${start.y} `
+
     let queue = [];
-    let count = 0
-    //const traverse = []
     
     queue.push(start)
 
     while(queue.length>0){
-      //traverse.push(queue[0].data)
+   
       if(queue[0].x == x && queue[0].y == y){
-       return count
+       return queue[0]
       } else {
-        count++;
+        //queue.push(",")
+        queue[0].mark = true;
         const selectChild = Object.keys(queue[0]).filter(prop => typeof queue[0][prop] == "object");
         for (let i = 0; i < selectChild.length; i++) {
             const prop = selectChild[i];
             const child = queue[0][prop]
             if(child.mark === false){
+                child.charge =  `${queue[0].charge}+ ${child.x},${child.y} `
                 queue.push(child)
-                child.mark = true
             }
+            
         }
       }
       queue.shift()
@@ -81,9 +84,10 @@ function search(origin, meta) {
     return 
 }
 
+console.log(knightMoves([0,0],[7,0]))
 
 
-console.log(find(3,4))
+//console.log(find(3,4))
 
 const ej = new Nodo(8,4)
 const ex = new Nodo(2,6)
@@ -116,7 +120,9 @@ const miObjeto = {
   // Resultado
   //console.log(propiedadesCumplenCondicion);
   
-
+const arrr = []
+arrr.push(",")
+console.log(arrr)
 
 // let asdas = {
 //     kol: 12,
