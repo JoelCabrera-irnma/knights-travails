@@ -1,7 +1,8 @@
 class Nodo {
-    constructor(x, y){
+    constructor(x, y, mark=false){
         this.x = x,
-        this.y = y
+        this.y = y,
+        this.mark = mark
     }
 }
 
@@ -33,11 +34,89 @@ function crearConexiones(nodo) {
         ){
             nodo["ref_"+i] = item
         }
-        
     }
 }
 
 buildGraph()
+
+function find(cordX , coordY){
+    let nodos = vertices
+    for (let i = 0; i < nodos.length; i++) {
+        const nodo = nodos[i];
+        if(nodo.x == cordX && nodo.y == coordY){
+            return nodo
+        }
+    }
+}
+
+function search(origin, meta) {
+    const [a, b] = origin;
+    const start = find(a,b);
+    const [x, y] = meta;
+
+    let queue = [];
+    let count = 0
+    //const traverse = []
+    
+    queue.push(start)
+
+    while(queue.length>0){
+      //traverse.push(queue[0].data)
+      if(queue[0].x == x && queue[0].y == y){
+       return count
+      } else {
+        count++;
+        const selectChild = Object.keys(queue[0]).filter(prop => typeof queue[0][prop] == "object");
+        for (let i = 0; i < selectChild.length; i++) {
+            const prop = selectChild[i];
+            const child = queue[0][prop]
+            if(child.mark === false){
+                queue.push(child)
+                child.mark = true
+            }
+        }
+      }
+      queue.shift()
+    }
+    return 
+}
+
+
+
+console.log(find(3,4))
+
+const ej = new Nodo(8,4)
+const ex = new Nodo(2,6)
+const ep = new Nodo(6,7)
+
+// Objeto de ejemplo
+const miObjeto = {
+    propiedad1: 10,
+    propiedad2: 20,
+    propiedad3: 30,
+    propiedad4: 40,
+    propiedad5: "jalisco",
+    propiedad6: ej,
+    propiedad7: ex,
+    propiedad8: ep
+  };
+  
+  // Condición: Seleccionar propiedades cuyo valor es mayor que 20
+  const propiedadesCumplenCondicion = Object.keys(miObjeto).filter(propiedad => typeof miObjeto[propiedad] == "object");
+  function mandarHijosAlaCola(array) {
+    const queue = []
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        const hijo = miObjeto[element]
+        queue.push(hijo)
+    }
+    console.log(queue)
+  }
+  //mandarHijosAlaCola(propiedadesCumplenCondicion)
+  // Resultado
+  //console.log(propiedadesCumplenCondicion);
+  
+
 
 // let asdas = {
 //     kol: 12,
