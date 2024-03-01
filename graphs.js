@@ -7,6 +7,7 @@ class Nodo {
     }
 }
 
+//Creacion de los vertices/nodos del tablero
 const vertices = [];
 
 for (let i = 0; i <= 7; i++) {
@@ -17,6 +18,7 @@ for (let i = 0; i <= 7; i++) {
 }
 console.log(vertices);
 
+//Union de los vertices/nodos del tablero
 function buildGraph(){
  for (let i = 0; i < vertices.length; i++) {
     const nodo = vertices[i];
@@ -40,6 +42,7 @@ function crearConexiones(nodo) {
 
 buildGraph()
 
+//Funcion auxiliar para encontrar un nodo dado
 function find(cordX , coordY){
     let nodos = vertices
     for (let i = 0; i < nodos.length; i++) {
@@ -50,21 +53,24 @@ function find(cordX , coordY){
     }
 }
 
+//Encontrar el camino mas corto hacia un casillero determinado
 function knightMoves(origin, meta) {
     const [a, b] = origin;
     const start = find(a,b);
     const [x, y] = meta;
 
-    start.charge = `${start.x},${start.y} `
+    start.charge = `[${start.x},${start.y}]`
 
     let queue = [];
-    
+
     queue.push(start)
 
     while(queue.length>0){
    
       if(queue[0].x == x && queue[0].y == y){
-       return queue[0]
+        clear(); //Restaura la propiedad mark de todos los nodos a su valor por defecto "false"
+        const output = returnClearResult(queue[0].charge)
+        return output
       } else {
         //queue.push(",")
         queue[0].mark = true;
@@ -73,7 +79,7 @@ function knightMoves(origin, meta) {
             const prop = selectChild[i];
             const child = queue[0][prop]
             if(child.mark === false){
-                child.charge =  `${queue[0].charge}+ ${child.x},${child.y} `
+                child.charge =  `${queue[0].charge}+[${child.x},${child.y}]`
                 queue.push(child)
             }
             
@@ -84,64 +90,29 @@ function knightMoves(origin, meta) {
     return 
 }
 
-console.log(knightMoves([0,0],[7,0]))
-
-
-//console.log(find(3,4))
-
-const ej = new Nodo(8,4)
-const ex = new Nodo(2,6)
-const ep = new Nodo(6,7)
-
-// Objeto de ejemplo
-const miObjeto = {
-    propiedad1: 10,
-    propiedad2: 20,
-    propiedad3: 30,
-    propiedad4: 40,
-    propiedad5: "jalisco",
-    propiedad6: ej,
-    propiedad7: ex,
-    propiedad8: ep
-  };
-  
-  // Condición: Seleccionar propiedades cuyo valor es mayor que 20
-  const propiedadesCumplenCondicion = Object.keys(miObjeto).filter(propiedad => typeof miObjeto[propiedad] == "object");
-  function mandarHijosAlaCola(array) {
-    const queue = []
-    for (let i = 0; i < array.length; i++) {
-        const element = array[i];
-        const hijo = miObjeto[element]
-        queue.push(hijo)
-    }
-    console.log(queue)
+function clear() {
+  for (let i = 0; i < vertices.length; i++) {
+    const nodo = vertices[i];
+    nodo.mark = false
   }
-  //mandarHijosAlaCola(propiedadesCumplenCondicion)
-  // Resultado
-  //console.log(propiedadesCumplenCondicion);
-  
-const arrr = []
-arrr.push(",")
-console.log(arrr)
+}
 
-// let asdas = {
-//     kol: 12,
-//     kol: "hueso",
-// }
+function returnClearResult(string) {
+  const store = string.split("+");
+  console.log(`You made it in ${store.length} moves!  Here's your path:`);
+  store.forEach(element => {
+      console.log(element)
+  });
+}
 
-// console.log(asdas.kol)
+//TEST DRIVER:
+knightMoves([3,7],[6,0])
 
-// // Variable con el nombre de la propiedad
-// let nombreDePropiedad = 32;
+knightMoves([0,0],[3,6])
 
-// // Objeto al que se le agregará la propiedad
-// let miObjeto = {};
+knightMoves([0,0],[7,7])
 
-// // Valor que se asignará a la nueva propiedad
-// let valorDePropiedad = "Hola, soy una propiedad nueva";
 
-// // Agregar la propiedad al objeto
-// miObjeto["ref"+nombreDePropiedad] = valorDePropiedad;
 
-// // Mostrar el objeto resultante
-// console.log(miObjeto);
+
+
